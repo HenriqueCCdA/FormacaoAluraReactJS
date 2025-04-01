@@ -16,7 +16,7 @@ const tema = {
             c: ''
         },
         neutras: {
-            a: '',
+            a: '#373737',
             b: '',
             c: ''
         },
@@ -26,6 +26,7 @@ const tema = {
         }
     },
     espacamentos: {
+       xs: '8px',
        s: '16px',
        l: '32px',
     },
