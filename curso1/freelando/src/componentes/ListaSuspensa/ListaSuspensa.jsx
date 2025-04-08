@@ -9,7 +9,7 @@ const ItemListaSuspensaEstilizada = styled.li`
     &:last-child {
         border: none;
     }
-    color: ${props => props.focoAtivo ? props.theme.cores.focus: 'inherit'};
+    color: ${props => props.focoAtivo ? props.theme.cores.focus : 'inherit'};
     &:hover {
         color: ${props => props.theme.cores.focus}
     }
@@ -66,7 +66,7 @@ const BotaoEstilizado = styled.button`
 `;
 
 
-export const ListaSupensa = ( { titulo, opcoes } ) => {
+export const ListaSupensa = ({ titulo, opcoes }) => {
     const [estaAberta, alternarVisibilidade] = useState(false);
     const [opcaoFocada, setOpcaoFocada] = useState(null);
     const [opcaoSelecionada, setOpcaoSelecionada] = useState(null);
@@ -77,28 +77,40 @@ export const ListaSupensa = ( { titulo, opcoes } ) => {
             case 'ArrowDown':
                 evento.preventDefault();
                 setOpcaoFocada(focoAntigo => {
-                    if(focoAntigo == null) {
+                    if (focoAntigo == null) {
                         return 0;
+                    }
+
+                    if (focoAntigo === (opcoes.length - 1)) {
+                        return opcoes.length - 1
                     }
 
                     return focoAntigo += 1;
                 })
                 break;
             case 'ArrowUp':
-                    evento.preventDefault();
-                    setOpcaoFocada(focoAntigo => {
-                        if(!focoAntigo) {
-                            return 0;
-                        }
+                evento.preventDefault();
+                setOpcaoFocada(focoAntigo => {
+                    if (!focoAntigo) {
+                        return 0;
+                    }
 
-                        return focoAntigo -= 1;
-                    })
+
+
+                    return focoAntigo -= 1;
+                })
                 break;
             case 'Enter':
-                    evento.preventDefault();
-                    setOpcaoFocada(null);
-                    alternarVisibilidade(false);
-                    setOpcaoSelecionada(opcoes[opcaoFocada]);
+                evento.preventDefault();
+                setOpcaoFocada(null);
+                alternarVisibilidade(false);
+                setOpcaoSelecionada(opcoes[opcaoFocada]);
+                break;
+            case 'Tab':
+            case 'Escape':
+                evento.preventDefault();
+                setOpcaoFocada(null);
+                alternarVisibilidade(false);
                 break;
             default:
                 break;
@@ -106,7 +118,7 @@ export const ListaSupensa = ( { titulo, opcoes } ) => {
     }
 
     return (<LabelEstilizada>
-        { titulo }
+        {titulo}
         <BotaoEstilizado
             estaAberta={estaAberta}
             onClick={() => alternarVisibilidade(!estaAberta)}
@@ -125,7 +137,7 @@ export const ListaSupensa = ( { titulo, opcoes } ) => {
                 focoAtivo={index === opcaoFocada}
                 onClick={() => setOpcaoSelecionada(opcao)}
             >
-                { opcao.text }
+                {opcao.text}
             </ItemListaSuspensaEstilizada>)}
         </ListaSuspensaEstilizada>}
     </LabelEstilizada>)
