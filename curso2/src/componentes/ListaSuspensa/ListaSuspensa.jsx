@@ -1,35 +1,7 @@
-import styled from "@emotion/styled/macro";
+import styled from "@emotion/styled"
 import { useState } from "react"
-
-const ItemListaSuspensaEstilizada = styled.li`
-    padding: ${props => props.theme.espacamentos.xs} 0;
-    text-align: center;
-    border-bottom: 1px solid ${props => props.theme.cores.neutras.c};
-    cursor: pointer;
-    &:last-child {
-        border: none;
-    }
-    color: ${props => props.focoAtivo ? props.theme.cores.focus : 'inherit'};
-    &:hover {
-        color: ${props => props.theme.cores.focus}
-    }
-`
-
-const ListaSuspensaEstilizada = styled.ul`
-    position: absolute;
-    top: 100%;
-    left: 0;
-    right: 0;
-    background-color: ${props => props.theme.cores.branco};
-    z-index: 1;
-    border: 1px solid ${props => props.theme.cores.neutras.a};
-    border-bottom-left-radius: 18px;
-    border-bottom-right-radius: 18px;
-    border-top: none;
-    margin: 0;
-    padding: 0 ${props => props.theme.espacamentos.m};
-    list-style: none;
-`
+import { ItemListaSuspensaEstilizado } from "./ItemListaSuspensaEstilizado"
+import { ListaSuspensaEstilizada } from "./ListaSuspensaEstilizada"
 
 const LabelEstilizada = styled.label`
     display: block;
@@ -39,7 +11,8 @@ const LabelEstilizada = styled.label`
     font-size: 20px;
     line-height: 24px;
     position: relative;
-`;
+
+`
 
 const BotaoEstilizado = styled.button`
     cursor: pointer;
@@ -63,16 +36,15 @@ const BotaoEstilizado = styled.button`
     &:focus {
         border-color: ${props => props.theme.cores.focus};
     }
-`;
+`
 
+export const ListaSupensa = ({ titulo, opcoes, valor, onChange }) => {
+    const [estaAberta, alternarVisibilidade] = useState(false)
 
-export const ListaSupensa = ({ titulo, opcoes }) => {
-    const [estaAberta, alternarVisibilidade] = useState(false);
     const [opcaoFocada, setOpcaoFocada] = useState(null);
-    const [opcaoSelecionada, setOpcaoSelecionada] = useState(null);
 
     const manipularTeclaDoTeclado = (evento) => {
-        alternarVisibilidade(true);
+        alternarVisibilidade(true)
         switch (evento.key) {
             case 'ArrowDown':
                 evento.preventDefault();
@@ -80,12 +52,10 @@ export const ListaSupensa = ({ titulo, opcoes }) => {
                     if (focoAntigo == null) {
                         return 0;
                     }
-
                     if (focoAntigo === (opcoes.length - 1)) {
                         return opcoes.length - 1
                     }
-
-                    return focoAntigo += 1;
+                    return focoAntigo += 1
                 })
                 break;
             case 'ArrowUp':
@@ -94,21 +64,24 @@ export const ListaSupensa = ({ titulo, opcoes }) => {
                     if (!focoAntigo) {
                         return 0;
                     }
-                    return focoAntigo -= 1;
+                    return focoAntigo -= 1
                 })
                 break;
-            case 'Enter':
-                evento.preventDefault();
-                setOpcaoFocada(null);
-                alternarVisibilidade(false);
-                setOpcaoSelecionada(opcoes[opcaoFocada]);
-                break;
-            case 'Tab':
-            case 'Escape':
-                evento.preventDefault();
-                setOpcaoFocada(null);
-                alternarVisibilidade(false);
-                break;
+                case 'Enter':
+                    evento.preventDefault();
+                    setOpcaoFocada(null)
+                    alternarVisibilidade(false)
+                    onChange(opcoes[opcaoFocada])
+                    break;
+                case 'Tab':
+                    setOpcaoFocada(null)
+                    alternarVisibilidade(false)
+                    break;
+                case 'Escape':
+                    evento.preventDefault();
+                    setOpcaoFocada(null)
+                    alternarVisibilidade(false)
+                    break;
             default:
                 break;
         }
@@ -117,25 +90,26 @@ export const ListaSupensa = ({ titulo, opcoes }) => {
     return (<LabelEstilizada>
         {titulo}
         <BotaoEstilizado
-            estaAberta={estaAberta}
-            onClick={() => alternarVisibilidade(!estaAberta)}
-            onKeyDown={manipularTeclaDoTeclado}
+             estaAberta={estaAberta}
+             onClick={() => alternarVisibilidade(!estaAberta)}
+             onKeyDown={manipularTeclaDoTeclado}
+             type='button'
         >
             <div>
-                {opcaoSelecionada ? opcaoSelecionada.text : 'Selecione'}
+                { valor ? valor.text : 'Selecione' }
             </div>
             <div>
                 <span>{estaAberta ? '▲' : '▼'}</span>
             </div>
         </BotaoEstilizado>
         {estaAberta && <ListaSuspensaEstilizada>
-            {opcoes.map((opcao, index) => <ItemListaSuspensaEstilizada
+            {opcoes.map((opcao, index) => <ItemListaSuspensaEstilizado
                 key={opcao.value}
                 focoAtivo={index === opcaoFocada}
-                onClick={() => setOpcaoSelecionada(opcao)}
-            >
+                onClick={() => onChange(opcao)}
+                >
                 {opcao.text}
-            </ItemListaSuspensaEstilizada>)}
+            </ItemListaSuspensaEstilizado>)}
         </ListaSuspensaEstilizada>}
     </LabelEstilizada>)
 }
