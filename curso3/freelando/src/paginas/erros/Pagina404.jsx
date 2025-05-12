@@ -24,7 +24,7 @@ const Pagina404 = () => {
                 variante="h1"
                 componente="h1"
               >
-                Ops... Página não encontrrada: (
+                Ops... Página não encontrada: (
               </Tipografia>
               <figure>
                 <ImagemEstilizada src={erro404}/>

@@ -5,7 +5,7 @@ import { Tipografia } from "../../componentes/Tipografia/Tipografia";
 import { Card } from "../../componentes/Card/Card";
 import styled from "@emotion/styled"
 import { CampoTexto } from "../../componentes/CampoTexto/CampoTexto";
-import { Link as RouterLink } from "react-router-dom"
+import { useNavigate, Link as RouterLink } from "react-router-dom"
 import { Botao } from "../../componentes/Botao/Botao";
 import { Link } from "../../componentes/Link/Link"
 import { useSessaoUsuarioContext } from "../../contexto/SessaoUsuario"
@@ -19,12 +19,14 @@ const FormEstilizado = styled.form`
 const Login = () => {
   const [email, setEmail] = useState('')
   const [senha, setSenha] = useState('')
+  const navigate = useNavigate();
 
   const { login } = useSessaoUsuarioContext()
 
   const tentarEfetuarLogin = async (evento) => {
     evento.preventDefault();
     login(email, senha);
+    navigate("/area-logada/perfil")
   }
 
   return (<Container>
